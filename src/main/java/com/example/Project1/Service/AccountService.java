@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 public class AccountService {
 
@@ -14,9 +15,15 @@ public class AccountService {
     public List<Accounts> getAccounts(){
         return accountsrepo.findAll();
     }
-    public Accounts getAccountById(int id){
-        return accountsrepo.findById(id).orElseThrow(()-> new RuntimeException("Not found"));
+    public Accounts getAccountById(int id) {
+        return accountsrepo.findById(id).orElseThrow(() -> new AccountNotFoundException("Account not found with id: " + id));
     }
+    public class AccountNotFoundException extends RuntimeException {
+        public AccountNotFoundException(String message) {
+            super(message);
+        }
+    }
+    
 
     public void addAccount(Accounts accounts){
         accountsrepo.save(accounts);
@@ -25,10 +32,8 @@ public class AccountService {
     public void updateAccount(Accounts accounts){
         accountsrepo.save(accounts);
     }
-
-//    public void deleteUser(Accounts accounts){
-//        accountsrepo.deleteById();
-//    }
-
+    public void deleteAccount(int id) {
+        accountsrepo.deleteById(id);
+    }    
 }
 

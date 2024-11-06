@@ -4,7 +4,6 @@ import com.example.Project1.Model.Users;
 import com.example.Project1.Repository.Usersrepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -15,8 +14,14 @@ public class UsersService {
         return usersrepo.findAll();
     }
     public Users getUsersById(int id){
-        return usersrepo.findById(id).orElseThrow(()-> new RuntimeException("Not found"));
+        return usersrepo.findById(id).orElseThrow(()-> new UserNotFoundException("User not found with id:"+id));
     }
+    public class UserNotFoundException extends RuntimeException {
+        public UserNotFoundException(String message) {
+            super(message);
+        }
+    }
+    
 
     public void addUsers(Users user){
         usersrepo.save(user);

@@ -1,8 +1,10 @@
 package com.example.Project1.Controller;
 
+
 import com.example.Project1.Model.Users;
 import com.example.Project1.Service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,19 +25,37 @@ public class UsersController {
         return service.getUsersById(id);
     }
 
+    
     @PostMapping("/users/additem")
-    public void addUsers(@RequestBody Users user){
-        service.addUsers(user);
+    public ResponseEntity<String> createUser(@RequestBody Users user) {
+        try {
+            service.updateUsers(user);
+            return ResponseEntity.ok("Account added successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
+        }
     }
 
-    @PutMapping("/users/update")
-    public void updateUsers(@RequestBody Users user){
-        service.updateUsers(user);
+    @PutMapping("/users/update/{id}")
+    public ResponseEntity<Users> updateUserById(@PathVariable int id, @RequestBody Users user){
+        Users existingUser=service.getUsersById(id);
+        if(existingUser!=null){
+            user.setUserid(id);
+            service.updateUsers(user);
+            return ResponseEntity.ok(service.getUsersById(id));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUsers(@PathVariable int id){
-        service.deleteUser(id);
+    public ResponseEntity<String> deleteUser(@PathVariable int id) {
+        try {
+            service.deleteUser(id);
+            return ResponseEntity.ok("User deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error deleting user: " + e.getMessage());
+        }
     }
+
 
 }

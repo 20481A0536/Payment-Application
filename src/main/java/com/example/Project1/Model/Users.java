@@ -10,16 +10,19 @@ import java.util.List;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userid;
+    private int userid;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
     private  long phonenumber;
-    @Column(nullable=false)
+    @Column(nullable=false,name = "email_id")
     private String email_id;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Accounts> accounts;
+    // @Column(nullable = false)
+    // private String password;
+
 
     public List<Accounts> getAccounts() {
         return accounts;
@@ -29,11 +32,11 @@ public class Users {
         this.accounts = accounts;
     }
 
-    public long getUserid() {
+    public int getUserid() {
         return userid;
     }
 
-    public void setUserid(long userid) {
+    public void setUserid(int userid) {
         this.userid = userid;
     }
 
@@ -60,4 +63,10 @@ public class Users {
     public void setEmail_id(String email_id) {
         this.email_id = email_id;
     }
+    // public String getPassword(){
+    //     return password;
+    // }
+    // public void setPassword(String password){
+    //     this.password=password;
+    // }
 }
